@@ -1,27 +1,19 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './style.css';
 import axios from 'axios';
 
-class LoginForm extends Component {
+function LoginForm() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    constructor(props) {
-        super(props);
-        
-        this.state = {email: '', password: ''};
-    }
-
-    onFormSubmit = (event) => {
+    function onFormSubmit(event) {
 
         event.preventDefault();
 
-        let data = {
-            password: this.state.password,
-            username: this.state.email
-        };
-
-        console.log(data);
-
-        axios.post('https://api.gii.gl/auth/login', data)
+        axios.post('https://api.gii.gl/auth/login', {
+            username: username,
+            password: password
+        })
           .then(function (response) {
             // let token = response.data.token;
             // localStorage.setItem('token', token);
@@ -30,27 +22,28 @@ class LoginForm extends Component {
           .catch(function (error) {
             console.log(error);
           });
-      }
-    
-    render() {
+
+    }
+
         return (
             <div className="login-form text-left col-md-4">
-                <form onSubmit={this.onFormSubmit }>
+                <form onSubmit={onFormSubmit }>
                     <header className="title text-center"><strong>Log in</strong></header>  
                     <div className="form-group">
                         <label>Email address</label>
-                        <input type="email" className="form-control" placeholder="Enter email" onChange={(e) => this.setState({email: e.target.value})}/>
+                        <input type="email" className="form-control" placeholder="Enter email" onChange={(e) => setUsername(e.target.value)}/>
                     </div>
                     <div className="form-group">
                         <label>Password</label>
-                        <input type="password" className="form-control" placeholder="Password" onChange={(e) => this.setState({password: e.target.value})}/>
+                        <input type="password" className="form-control" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                     </div>
                     <button type="submit" className="btn btn-block btn-primary">Login</button>
                     <div className="create-account-link">Don't have an account? <a href='/'>Create your account</a> </div>
                 </form>
             </div>
         );
-    }
+
 }
+
 
 export default LoginForm;
